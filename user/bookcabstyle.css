@@ -1,0 +1,121 @@
+html,body
+{
+    min-width: 100%;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px !important;
+    overflow-x: hidden; 
+}
+.cover{
+	width: 100%;
+	position: relative;
+	height: 600px;
+}
+.container{
+	position: absolute;
+	top:180px;
+}
+.img{
+	opacity: 0.9;
+	width: 100%;
+	height: 750px;
+}
+#h{
+	position: absolute;
+	top: 30px;
+	left: 20%;
+	color: white;
+}
+@media screen and (min-width: 601px) {
+  div#h {
+    font-size: 40px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  div#h {
+    font-size: 30px;
+  }
+}
+#red{
+	color: red!notimportant;
+}
+.form-h{
+	font-size: 25px;
+}
+#para {
+	
+}
+@media screen and (max-width: 375px) {
+  .form-h {
+	width: 60%;
+	background-color:  #ffff33;
+  }
+}
+@media screen and (min-width: 601px) {
+  .form-h {
+	width: 25%;
+	background-color:  #ffff33;
+  }
+}
+@media screen and (min-width: 1100px) {
+  .form-h {
+  	margin-left: 5px;
+	width: 25%;
+	background-color:  #ffff33;
+  }
+}
+@media screen and (min-width: 1100px) {
+  div.frm {
+	width: 40%;
+  }
+}
+
+@media screen and (width: 375px) {
+  div.cover {
+    min-height: 800px;
+  }
+}
+.opt{
+	width: 40%;
+}
+
+
+.ui-select{width: 100%}
+/* This is to remove the arrow of select element in IE */
+select::-ms-expand {	display: none; }
+select{
+    -webkit-appearance: none;
+    appearance: none;
+}
+@-moz-document url-prefix(){
+	.ui-select{border: 1px solid #CCC; border-radius: 4px; box-sizing: border-box; position: relative; overflow: hidden;}
+  .ui-select select { width: 110%; background-position: right 30px center !important; border: none !important;}
+}
+#ftbg{
+	background-color: #fabd06;
+}
+#logo{
+	font-size: 25px;
+	margin-top: 15px;
+}
+#clr{
+	color: red;
+}
+#spanbg{
+	background-color: #fabd06;
+	border-radius: 10px;
+	padding: 5px;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
