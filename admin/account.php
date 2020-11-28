@@ -59,7 +59,7 @@ include 'config.php';
       <a href="users.php">Users</a>
       <a href="location.php">Locations</a>
       <a href="account.php">Account</a>
-      <a href="http://localhost/task/cedcab/user/index.php">LogOut</a>
+      <a href="http://localhost/task/cedcab/user/index.php?logout=1">LogOut</a>
 
   </div>
 

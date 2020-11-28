@@ -1,18 +1,37 @@
 <?php 
-	session_start();
-  print_r($_SESSION['userdata']['user_id']);
-	include 'config.php';
-      $sql= "SELECT * FROM user WHERE user_name='".$username."' AND password='".$password."'";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        while ($row=$result->fetch_assoc()) {
-            $_SESSION['userdata']=array('username'=>$row['user_name'],'user_id'=>$row['user_id']);
-            header('Location: bookcab.php');
-        }
+session_start();
+// print_r($_SESSION['userdata']['user_id']);
+include 'config.php';
+$sql= "SELECT * FROM user WHERE user_id='".$_SESSION['userdata']['user_id']."'";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+  while ($row=$result->fetch_assoc()) {
+    $uname=$row['user_name'];
+    $name1=$row['name'];
+    $mob=$row['mobile'];
+    $pass=$row['password'];
+    // print_r($row);
+  }
+}else{
+  echo "Error";
+}
+  $error='';
+  if (isset($_POST['register'])) {
+    $username=isset($_POST['user_name'])?$_POST['user_name']:'';
+    $name=isset($_POST['name'])?$_POST['name']:'';
+    $mob_number=isset($_POST['number'])?$_POST['number']:'';
+    $password=isset($_POST['password'])?$_POST['password']:'';
+
+    $sql="UPDATE `user` SET `user_name` = '".$username."', `name` = '".$name."', `mobile` = '".$mob_number."', `password` = '".$password."' WHERE `user`.`user_id` = ".$_SESSION['userdata']['user_id']."";
+    if ($conn->query($sql)===true) {
+      echo "Record Updated Successfully";
     }else{
-        echo "Invalid Username or Password";
+      print_r($conn->error);
     }
- ?>
+    
+    $conn->close();
+  }
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -53,7 +72,7 @@
             <a class="nav-link" href="update.php">Update Info</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.php">LogOut</a>
+            <a class="nav-link" href="index.php?logout=1">LogOut</a>
           </li>
         </ul>
       </div>
@@ -66,16 +85,16 @@
     <hr>
 
     <label for="user_name"><b>User_Name</b></label>
-    <input type="text" placeholder="Enter User Name" name="user_name" id="user_name" value="Ahmad" required>
+    <input type="text" placeholder="Enter User Name" name="user_name" id="user_name" value=<?php echo '"';print_r($uname);echo '"'; ?> required disabled>
 
     <label for="name"><b>Name</b></label>
-    <input type="text" placeholder="Enter Name" name="name" id="name" required>
+    <input type="text" placeholder="Enter Name" name="name" id="name" value=<?php echo '"';print_r($name1);echo '"'; ?> required>
 
     <label for="number"><b>Number</b></label>
-    <input type="text" placeholder="Enter Mobile Number" name="number" id="number" required>
+    <input type="text" placeholder="Enter Mobile Number" name="number" id="number" value=<?php echo '"';print_r($mob);echo '"'; ?> required>
 
     <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="password" id="psw" required>
+    <input type="password" placeholder="Enter Password" name="password" id="psw" value=<?php echo '"';print_r($pass);echo '"'; ?> required>
 
     <hr>
 

@@ -1,5 +1,6 @@
 <?php 
 session_start();
+print_r($_SESSION['userdata']['user_id']);
 include 'config.php';
  ?>
 <!doctype html>
@@ -40,7 +41,7 @@ include 'config.php';
             <a class="nav-link" href="update.php">Update Info</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.php">LogOut</a>
+            <a class="nav-link" href="index.php?logout=1">LogOut</a>
           </li>
         </ul>
       </div>
@@ -67,7 +68,7 @@ include 'config.php';
                       die("Connection failed: " . $conn->connect_error);
                     }
 
-                    $sql = "SELECT * FROM ride";
+                    $sql = "SELECT * FROM ride WHERE customer_user_id='".$_SESSION['userdata']['user_id']."'";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {

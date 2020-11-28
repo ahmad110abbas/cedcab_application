@@ -1,7 +1,11 @@
 <?php 
 session_start();
 include 'config.php';
-
+if (isset($_GET['logout'])) {
+    session_unset();
+    session_destroy();
+    header('Location: index.php');
+}
 if (isset($_POST['login'])) {
     $username=isset($_POST['username'])?$_POST['username']:'';
     $password=isset($_POST['password'])?$_POST['password']:'';

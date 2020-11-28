@@ -55,7 +55,7 @@ session_start();
 						<a class="nav-link" href="update.php">Update Info</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="index.php">LogOut</a>
+						<a class="nav-link" href="index.php?logout=1">LogOut</a>
 					</li>
 				</ul>
 			</div>
