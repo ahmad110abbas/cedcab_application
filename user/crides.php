@@ -66,8 +66,7 @@ include 'config.php';
                     if ($conn->connect_error) {
                       die("Connection failed: " . $conn->connect_error);
                     }
-
-                    $sql = "SELECT * FROM ride WHERE status='2'";
+                    $sql = "SELECT * FROM ride WHERE status='2' AND customer_user_id='".$_SESSION['userdata']['user_id']."'";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
