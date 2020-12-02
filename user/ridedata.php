@@ -1,0 +1,11 @@
+<?php 
+session_start();
+	$p=$_GET['pickup'];
+	$d=$_GET['drop'];
+	$c=$_GET['cabtype'];
+	$l=$_GET['luggage'];
+	$_SESSION['p']=$p;
+	$_SESSION['d']=$d;
+	$_SESSION['c']=$c;
+	$_SESSION['l']=$l;
+ ?>

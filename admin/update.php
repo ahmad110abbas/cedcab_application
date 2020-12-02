@@ -20,5 +20,22 @@
 		$sql = "UPDATE `ride` SET `status` = '2' WHERE `ride_id` = ".$ride_id."";
 		$result = $conn->query($sql);
 	}
-
+	if (isset($_POST['va'])) {
+		$user_id=$_POST['va'];
+		$conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		$sql = "UPDATE `user` SET `isblock` = '0' WHERE `user`.`user_id`= ".$user_id."";
+		$result = $conn->query($sql);
+	}
+	if (isset($_POST['loc'])) {
+		$id=$_POST['loc'];
+		$conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		$sql="DELETE FROM `location` WHERE `location`.`location_id`= ".$id."";
+		$result = $conn->query($sql);
+	}
 ?>

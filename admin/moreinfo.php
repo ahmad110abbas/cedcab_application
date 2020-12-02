@@ -1,15 +1,12 @@
 <?php 
 session_start();
 include 'config.php';
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 if ($conn->connect_error) {
 	die("Connection failed: " . $conn->connect_error);
 }
-// if (isset($_POST['fare'])) {
-// 	print_r($_GET);
-// 	print_r($_POST);
-// 	die();
-// }
+
 function display_rec($result){
 	echo "<thead>";
 	echo "<tr>";
@@ -48,7 +45,7 @@ function display_user($result){
 	echo "<tr>";
 	echo '<th scope="col">#</th>';
 	echo '<th scope="col">User Name</th>';
-	echo '<th scope="col">Name</th>';
+	echo '<th scope="col" onclick="sortTable(2);">Name</th>';
 	echo '<th scope="col">Date Of SignUp</th>';
 	echo '<th scope="col">Mobile</th>';
 	echo '<th scope="col">Action</th>';
@@ -63,7 +60,7 @@ function display_user($result){
 			echo '<td>',$row["name"],'</td>';
 			echo '<td>',$row["dateofsignup"],'</td>';
 			echo '<td>',$row["mobile"],'</td>';
-			echo '<td><button type="button" class="btn btn-warning">Allow</button></td>';
+			echo '<td><button type="button" class="btn btn-warning" onclick="allowuser('.$row["user_id"].')">Allow</button></td>';
 			echo "<tr>";
 			$count=$count+1;
 		}
@@ -74,9 +71,6 @@ function display_user($result){
 
 ?>
 
-<!doctype html>
-<html lang="en">
-<head>
 
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -90,6 +84,7 @@ function display_user($result){
 	<title>CedCab</title>
 </head>
 <body>
+	<a href="index.php">Back To Home</a>
 	<form action="" method="POST">
 		<?php echo '<input type="text" name="data" value="" hidden>';  ?>
 		<input type="submit" name="fare" value="sortbyfare">
@@ -98,16 +93,20 @@ function display_user($result){
 		<?php echo '<input type="text" name="data" value="" hidden>';  ?>
 		<input type="submit" name="date" value="sortbydate">
 	</form>
-	<table class="table" id="myTable">
+	<form action="" method="POST">
+		<?php echo '<input type="text" name="data" value="" hidden>';  ?>
+		<input type="submit" name="lastweek" value="lastweek">
+	</form>
+	<table class="table" id="myTable2">
 
 		<tbody>
 			<?php 
-			if (isset($_GET['id']) && ($_GET['id']==1) && is_null($_POST['fare']) && is_null($_POST['date'])) {
+			if (isset($_GET['id']) && ($_GET['id']==1) && is_null($_POST['fare']) && is_null($_POST['date']) && is_null($_POST['lastweek'])) {
 				$sql = "SELECT * FROM ride WHERE status='".$_GET['id']."'";
 				$result = $conn->query($sql);
 				display_rec($result);
 			}
-			if (isset($_GET['id']) && ($_GET['id']==3)) {
+			if (isset($_GET['id']) && ($_GET['id']==3) && is_null($_POST['fare']) && is_null($_POST['lastweek'])) {
 				$sql = "SELECT * FROM ride";
 				$result = $conn->query($sql);
 				display_rec($result);
@@ -144,7 +143,26 @@ function display_user($result){
 			}
 			if (isset($_POST['date']) && ($_GET['id']==1)) {
 				$sql="SELECT * FROM `ride` WHERE status='".$_GET['id']."' ORDER BY `ride`.`ride_date` DESC";
-				// $sql = "SELECT * FROM ride WHERE status='".$_GET['id']."' ORDER BY date DESC";
+				$result = $conn->query($sql);
+				display_rec($result);
+			}
+			if (isset($_POST['lastweek']) && ($_GET['id']==1)) {
+				$sql="SELECT * FROM `ride` WHERE ride_date >= DATE_ADD(CURDATE(),INTERVAL -7 DAY) AND status='".$_GET['id']."'";
+				$result = $conn->query($sql);
+				display_rec($result);
+			}
+			if (isset($_POST['fare']) && ($_GET['id']==3)) {
+				$sql = "SELECT * FROM ride ORDER BY total_fare DESC";
+				$result = $conn->query($sql);
+				display_rec($result);
+			}
+			if (isset($_POST['lastweek']) && ($_GET['id']==3)) {
+				$sql="SELECT * FROM `ride` WHERE ride_date >= DATE_ADD(CURDATE(),INTERVAL -7 DAY)";
+				$result = $conn->query($sql);
+				display_rec($result);
+			}
+			if (isset($_POST['date']) && ($_GET['id']==3)) {
+				$sql="SELECT * FROM `ride` ORDER BY `ride`.`ride_date` DESC";
 				$result = $conn->query($sql);
 				display_rec($result);
 			}
@@ -186,6 +204,22 @@ function display_user($result){
 			}
 		});
 	}
+	function allowuser(va){
+		console.log(va);
+		location.reload();
+		$.ajax({
+			url:'update.php',
+			type:'POST',
+			data:{va:va},
+			success:function(result){
+				console.log(result);
+			},
+			error: function(){
+				alert("error");
+			}
+		});
+	}
 </script>
 
 <!-- select * from tbl_ride where ride_date>DATE_SUB(now(),1 WEEK INTERVAL) and STATUS=1 OR ANY CONDITION ACCORDING TO YOU -->
+

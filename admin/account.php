@@ -64,7 +64,7 @@ include 'config.php';
   </div>
 
   <div class="main">
-
+<a href="index.php">Back To Home</a>
 <table class="table">
     <thead>
       <tr>

@@ -1,5 +1,19 @@
 <?php 
 session_start();
+include 'config.php';
+$expense=0;
+// SELECT  FROM table_name WHERE condition;
+$sql= "SELECT SUM(total_fare) AS faresum FROM ride WHERE customer_user_id='".$_SESSION['userdata']['user_id']."'";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+	while ($pending=$result->fetch_assoc()) {
+		$expense=$pending;
+	}
+	
+
+}else{
+	echo "Invalid Username or Password";
+}
 ?>
 
 <!doctype html>
@@ -29,7 +43,7 @@ session_start();
 		});
 	</script>
 </head>
-<body>
+<body  onmouseover="myFunction()">
 	<section class="">
 		<nav class="navbar navbar-expand-lg navbar-light py-0"style="background-color: #fabd06;">
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +53,9 @@ session_start();
 				<a class="navbar-brand" href="#"><p id="logo">Ced<span id="clr">Cab</span></p></a>
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 					<li class="nav-item active">
-						<a class="nav-link" href="bookcab.php"><?php echo "Welcome "; print_r($_SESSION['userdata']['username']); ?> <span class="sr-only">(current)</span></a>
+						<a class="nav-link" href="bookcab.php"><?php echo "Welcome "; if (isset($_SESSION['userdata']['username'])) {
+							print_r($_SESSION['userdata']['username']);
+						}; ?> <span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -55,7 +71,15 @@ session_start();
 						<a class="nav-link" href="update.php">Update Info</a>
 					</li>
 					<li class="nav-item">
+						<a class="nav-link" href="invoice.php">Invoice</a>
+					</li>
+					<li class="nav-item">
 						<a class="nav-link" href="index.php?logout=1">LogOut</a>
+					</li>
+					<li class="nav-item">
+						<?php 
+							echo '<a class="nav-link" href="">Total Expense='.$expense['faresum'].'</a>';
+						 ?>
 					</li>
 				</ul>
 			</div>
@@ -82,7 +106,7 @@ session_start();
 								<div class="form-group" style="color:grey;width: auto;">
 
 									<select class="form-control bg-quote" name="pickup" id="pickup">
-										<option value="" disabled selected>PICKUP</option>
+										<?php echo '<option value="'.$_SESSION['p'].'" selected>'.$_SESSION['p'].'</option>'; ?>
 										
 										<?php 
 										include 'config.php';
@@ -106,11 +130,10 @@ session_start();
 										?>
 									</select>
 
-
 								</div>
 								<div class="form-group">
 									<select class="form-control bg-quote" name="drop" id="drop">
-										<option value="" disabled selected>DROP</option>
+										<?php echo '<option value="'.$_SESSION['d'].'" selected>'.$_SESSION['d'].'</option>'; ?>
 										<?php 
 
 										$conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
@@ -135,7 +158,7 @@ session_start();
 								<div class="form-group ui-select">
 
 									<select class="form-control bg-quote" name="type" id="cabtype">
-										<option value="" disabled selected>CAB TYPE</option>
+										<?php echo '<option value="'.$_SESSION['c'].'" selected>'.$_SESSION['c'].'</option>'; ?>
 										<option value="CedMicro">CedMicro</option>
 										<option value="CedMini">CedMini</option>
 										<option value="CedRoyal">CedRoyal</option>
@@ -147,7 +170,7 @@ session_start();
 
 
 									<div class="form-group mt-3">
-										<input type="number" class="form-control" id="luggage" placeholder="Weight">
+										<?php echo '<input type="number" class="form-control" id="luggage" placeholder="Weight" value="'.$_SESSION['l'].'">'; ?>
 									</div>
 									<div class="form-group mt-3">
 										<input type="text" class="form-control" id="fare" disabled>
@@ -155,7 +178,7 @@ session_start();
 
 								</div>
 								<button type="submit" class="btn btn-warning btn-lg form-control mb-3" id="button">Calculate Fare</button>
-								<button type="submit" class="btn btn-warning btn-lg form-control" id="bookbutton">BookCab</button>
+								<button type="submit" class="btn btn-warning btn-lg form-control" id="bookbutton" onclick="locate()">BookCab</button>
 
 							</form>
 						</div>
@@ -199,6 +222,16 @@ session_start();
 	</html>
 
 	<script>
+		var i=0;
+		var j=0;
+// function myFunction(){
+// 	if (i==0) {
+// 		document.getElementById("button").click();
+// 		i=i+1;
+// 	}
+// 	return;
+// }
+		
 		var res=0;
 		$(document).ready(function(){
 			$('#fare').hide();
@@ -253,6 +286,7 @@ session_start();
 						$('#fare').show();
 						$('#fare').val("Total Fare:"+result);
 						$('#bookbutton').show();
+						my();
 					},
 					error: function(){
 						alert("error");
@@ -312,6 +346,18 @@ session_start();
 						alert("error");
 					}
 				});
+			// window.location.href = 'http://localhost/task/cedcab/user/login.php';
 			});
+		// window.location.href='';
+
 		});
+		// function my(){
+		// 	if (j==0) {
+		// 		document.getElementById("bookbutton").click();
+		// 		location.reload();
+		// 		return;
+		// 		j=j+1;
+		// 	}
+		// 	return;
+		// }
 	</script>

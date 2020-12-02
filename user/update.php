@@ -25,6 +25,7 @@ if ($result->num_rows > 0) {
     $sql="UPDATE `user` SET `user_name` = '".$username."', `name` = '".$name."', `mobile` = '".$mob_number."', `password` = '".$password."' WHERE `user`.`user_id` = ".$_SESSION['userdata']['user_id']."";
     if ($conn->query($sql)===true) {
       echo "Record Updated Successfully";
+      header('Location: http://localhost/task/cedcab/user/login.php');
     }else{
       print_r($conn->error);
     }
@@ -85,7 +86,7 @@ if ($result->num_rows > 0) {
     <hr>
 
     <label for="user_name"><b>User_Name</b></label>
-    <input type="text" placeholder="Enter User Name" name="user_name" id="user_name" value=<?php echo '"';print_r($uname);echo '"'; ?> required disabled>
+    <input type="text" placeholder="Enter User Name" name="user_name" id="user_name" value=<?php echo '"';print_r($uname);echo '"'; ?> required>
 
     <label for="name"><b>Name</b></label>
     <input type="text" placeholder="Enter Name" name="name" id="name" value=<?php echo '"';print_r($name1);echo '"'; ?> required>

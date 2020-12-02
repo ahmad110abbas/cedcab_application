@@ -17,6 +17,7 @@ if (isset($_POST['submit'])) {
 <!doctype html>
 <html lang="en">
 <head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <style>
     body {
       font-family: "Lato", sans-serif;
@@ -76,6 +77,7 @@ if (isset($_POST['submit'])) {
   </div>
 
   <div class="main">
+    <a href="index.php">Back To Home</a>
     <section>
       <form action="location.php" method="POST">
         <div class="form-group">
@@ -115,7 +117,7 @@ if (isset($_POST['submit'])) {
             echo '<th scope="row">',$count,'</th>';
             echo '<td>',$row["name"],'</td>';
             echo '<td>',$row["distance"],'</td>';
-            echo '<td><button type="button" class="btn btn-danger">Delete</button><button type="button" class="btn btn-warning">Edit</button></td>';
+            echo '<td><button type="button" class="btn btn-danger" onclick="dlocation('.$row['location_id'].')">Delete</button></td>';
             echo "<tr>";
             $count=$count+1;
           }
@@ -126,9 +128,22 @@ if (isset($_POST['submit'])) {
       </tbody>
     </table>
   </div>
-
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-
 </body>
 </html>
+<script type="text/javascript">
+  function dlocation(loc){
+    console.log(loc);
+    location.reload();
+    $.ajax({
+      url:'update.php',
+      type:'POST',
+      data:{loc:loc},
+      success:function(result){
+        console.log(result);
+      },
+      error: function(){
+        alert("error");
+      }
+    });
+  }
+</script>
