@@ -71,9 +71,6 @@ if ($result->num_rows > 0) {
 						<a class="nav-link" href="update.php">Update Info</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="invoice.php">Invoice</a>
-					</li>
-					<li class="nav-item">
 						<a class="nav-link" href="index.php?logout=1">LogOut</a>
 					</li>
 					<li class="nav-item">

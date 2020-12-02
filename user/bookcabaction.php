@@ -1,9 +1,13 @@
 <?php
+session_start();
 	include 'config.php';
 	$pickup=$_POST['pickup'];
 	$drop=$_POST['drop'];
 	$cabtype=$_POST['cabtype'];
-	
+	// unset($_SESSION['p']);
+	// unset($_SESSION['d']);
+	// unset($_SESSION['c']);
+	// unset($_SESSION['w']);
 
 	// $distance=array(
 	// 	"Charbagh"=>"0",

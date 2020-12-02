@@ -2,6 +2,10 @@
 session_start();
 include 'config.php';
 if (isset($_GET['logout'])) {
+    unset($_SESSION['p']);
+    unset($_SESSION['d']);
+    unset($_SESSION['c']);
+    unset($_SESSION['l']);
     session_unset();
     session_destroy();
     header('Location: index.php');

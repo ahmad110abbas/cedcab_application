@@ -31,7 +31,7 @@ function display_rec($result){
 			echo '<td>',$row["total_distance"],'</td>';
 			echo '<td>',$row["luggage"],'</td>';
 			echo '<td>',$row["total_fare"],'</td>';
-			echo '<td><button type="button" class="btn btn-danger" onclick="cncl('.$row["ride_id"].')">Cancel</button><button type="button" class="btn btn-warning" onclick="allow('.$row["ride_id"].')">Allow</button></td>';
+			echo '<td><button type="button" class="btn btn-danger" onclick="allow('.$row["ride_id"].')">Cancel</button><button type="button" class="btn btn-warning" onclick="cncl('.$row["ride_id"].')">Allow</button></td>';
 			echo "<tr>";
 			$count=$count+1;
 		}
@@ -221,5 +221,4 @@ function display_user($result){
 	}
 </script>
 
-<!-- select * from tbl_ride where ride_date>DATE_SUB(now(),1 WEEK INTERVAL) and STATUS=1 OR ANY CONDITION ACCORDING TO YOU -->
 

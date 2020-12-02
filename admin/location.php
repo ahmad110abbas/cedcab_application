@@ -117,7 +117,7 @@ if (isset($_POST['submit'])) {
             echo '<th scope="row">',$count,'</th>';
             echo '<td>',$row["name"],'</td>';
             echo '<td>',$row["distance"],'</td>';
-            echo '<td><button type="button" class="btn btn-danger" onclick="dlocation('.$row['location_id'].')">Delete</button></td>';
+            echo '<td><button type="button" class="btn btn-danger" onclick="dlocation('.$row['location_id'].')">Delete</button><button type="button" class="btn btn-secondary" onclick="enable('.$row['location_id'].')">Enable</button><button type="button" class="btn btn-secondary" onclick="disable('.$row['location_id'].')">Disable</button></td>';
             echo "<tr>";
             $count=$count+1;
           }
@@ -138,6 +138,36 @@ if (isset($_POST['submit'])) {
       url:'update.php',
       type:'POST',
       data:{loc:loc},
+      success:function(result){
+        console.log(result);
+      },
+      error: function(){
+        alert("error");
+      }
+    });
+  }
+  function enable(l){
+    console.log(l);
+    location.reload();
+    $.ajax({
+      url:'update.php',
+      type:'POST',
+      data:{l:l},
+      success:function(result){
+        console.log(result);
+      },
+      error: function(){
+        alert("error");
+      }
+    });
+  }
+  function disable(lo){
+    console.log(lo);
+    location.reload();
+    $.ajax({
+      url:'update.php',
+      type:'POST',
+      data:{lo:lo},
       success:function(result){
         console.log(result);
       },

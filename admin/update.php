@@ -38,4 +38,22 @@
 		$sql="DELETE FROM `location` WHERE `location`.`location_id`= ".$id."";
 		$result = $conn->query($sql);
 	}
+	if (isset($_POST['l'])) {
+		$id=$_POST['l'];
+		$conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		$sql="UPDATE `location` SET `is_available` = '1' WHERE `location`.`location_id` = ".$id."";
+		$result = $conn->query($sql);
+	}
+	if (isset($_POST['lo'])) {
+		$id=$_POST['lo'];
+		$conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		$sql="UPDATE `location` SET `is_available` = '0' WHERE `location`.`location_id` = ".$id."";
+		$result = $conn->query($sql);
+	}
 ?>
