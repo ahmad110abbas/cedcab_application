@@ -1,4 +1,9 @@
 <?php 
+session_start();
+if (isset($_SESSION['userdata'])) {
+    header('Location: http://localhost/task/cedcab/user/login.php');
+    exit;
+}
 include 'config.php';
 $pending1=array();
 $complete1=array();

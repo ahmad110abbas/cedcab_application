@@ -111,7 +111,7 @@ function display_user($result){
 				$result = $conn->query($sql);
 				display_rec($result);
 			}
-			if (isset($_GET['id']) && ($_GET['id']==2)) {
+			if (isset($_GET['id']) && ($_GET['id']==2) && is_null($_POST['fare'])) {
 				$sql = "SELECT * FROM ride WHERE status='".$_GET['id']."'";
 				$result = $conn->query($sql);
 				display_rec($result);
@@ -136,6 +136,12 @@ function display_user($result){
 				$result = $conn->query($sql);
 				display_user($result);
 			}
+
+
+
+
+
+
 			if (isset($_POST['fare']) && ($_GET['id']==1)) {
 				$sql = "SELECT * FROM ride WHERE status='".$_GET['id']."' ORDER BY total_fare DESC";
 				$result = $conn->query($sql);
@@ -151,6 +157,10 @@ function display_user($result){
 				$result = $conn->query($sql);
 				display_rec($result);
 			}
+
+
+
+
 			if (isset($_POST['fare']) && ($_GET['id']==3)) {
 				$sql = "SELECT * FROM ride ORDER BY total_fare DESC";
 				$result = $conn->query($sql);
@@ -166,6 +176,27 @@ function display_user($result){
 				$result = $conn->query($sql);
 				display_rec($result);
 			}
+
+
+
+
+
+			if (isset($_POST['fare']) && ($_GET['id']==2)) {
+				$sql = "SELECT * FROM ride ORDER BY total_fare DESC";
+				$result = $conn->query($sql);
+				display_rec($result);
+			}
+			if (isset($_POST['lastweek']) && ($_GET['id']==2)) {
+				$sql="SELECT * FROM `ride` WHERE ride_date >= DATE_ADD(CURDATE(),INTERVAL -7 DAY)";
+				$result = $conn->query($sql);
+				display_rec($result);
+			}
+			if (isset($_POST['date']) && ($_GET['id']==2)) {
+				$sql="SELECT * FROM `ride` ORDER BY `ride`.`ride_date` DESC";
+				$result = $conn->query($sql);
+				display_rec($result);
+			}
+
 			?>
 		</tbody>
 	</table>
