@@ -14,6 +14,7 @@ if ($result->num_rows > 0) {
 }else{
 	echo "Invalid Username or Password";
 }
+  error_reporting(E_WARNING);
 ?>
 
 <!doctype html>
@@ -118,7 +119,9 @@ if ($result->num_rows > 0) {
 
 										if ($result->num_rows > 0) {
 											while($row = $result->fetch_assoc()) {
-
+												if ($row['name']==$_SESSION['p']) {
+													continue;
+												}
 												echo '<option value="',$row['name'],'">',$row['name'],'</option>';
 											}
 										} else {
@@ -143,7 +146,9 @@ if ($result->num_rows > 0) {
 
 										if ($result->num_rows > 0) {
 											while($row = $result->fetch_assoc()) {
-
+												if ($row['name']==$_SESSION['d']) {
+													continue;
+												}
 												echo '<option value="',$row['name'],'">',$row['name'],'</option>';
 											}
 										} else {
@@ -156,10 +161,34 @@ if ($result->num_rows > 0) {
 
 									<select class="form-control bg-quote" name="type" id="cabtype">
 										<?php echo '<option value="'.$_SESSION['c'].'" selected>'.$_SESSION['c'].'</option>'; ?>
-										<option value="CedMicro">CedMicro</option>
-										<option value="CedMini">CedMini</option>
-										<option value="CedRoyal">CedRoyal</option>
-										<option value="CedSUV">CedSUV</option>
+										<?php 
+											if ($_SESSION['c']=="cedMicro") {
+												echo '<option value="CedMini">CedMini</option>';
+												echo '<option value="CedRoyal">CedRoyal</option>';
+												echo '<option value="CedSUV">CedSUV</option>';
+											}
+											else if ($_SESSION['c']=="cedMini") {
+												echo '<option value="CedMicro">CedMicro</option>';
+												echo '<option value="CedRoyal">CedRoyal</option>';
+												echo '<option value="CedSUV">CedSUV</option>';
+											}
+											else if ($_SESSION['c']=="cedRoyal") {
+												echo '<option value="CedMicro">CedMicro</option>';
+												echo '<option value="CedSUV">CedSUV</option>';
+												echo '<option value="CedMini">CedMini</option>';
+											}
+											else if ($_SESSION['c']=="CedSUV") {
+												echo '<option value="CedMicro">CedMicro</option>';
+												echo '<option value="cedRoyal">cedRoyal</option>';
+												echo '<option value="CedMini">CedMini</option>';
+											}else{
+												echo '<option value="CedSUV">CedSUV</option>';
+												echo '<option value="CedMicro">CedMicro</option>';
+												echo '<option value="cedRoyal">cedRoyal</option>';
+												echo '<option value="CedMini">CedMini</option>';
+											}
+										 ?>
+
 									</select>
 
 								</div>
@@ -167,7 +196,12 @@ if ($result->num_rows > 0) {
 
 
 									<div class="form-group mt-3">
-										<?php echo '<input type="number" class="form-control" id="luggage" placeholder="Weight" value="'.$_SESSION['l'].'">'; ?>
+										<?php 
+										if ($_SESSION['c']=="cedMicro") {
+											echo '<input type="number" class="form-control" id="luggage" placeholder="Weight" value="0">';										}else{
+												echo '<input type="number" class="form-control" id="luggage" placeholder="Weight" value="'.$_SESSION['l'].'">';
+											}
+										 ?>
 									</div>
 									<div class="form-group mt-3">
 										<input type="text" class="form-control" id="fare" disabled>
@@ -217,17 +251,15 @@ if ($result->num_rows > 0) {
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 	</body>
 	</html>
-
+<?php 
+unset($_SESSION['p']);
+unset($_SESSION['d']);
+unset($_SESSION['c']);
+unset($_SESSION['l']);
+ ?>
 	<script>
 		var i=0;
 		var j=0;
-// function myFunction(){
-// 	if (i==0) {
-// 		document.getElementById("button").click();
-// 		i=i+1;
-// 	}
-// 	return;
-// }
 		
 		var res=0;
 		$(document).ready(function(){
@@ -343,18 +375,6 @@ if ($result->num_rows > 0) {
 						alert("error");
 					}
 				});
-			// window.location.href = 'http://localhost/task/cedcab/user/login.php';
 			});
-		// window.location.href='';
-
 		});
-		// function my(){
-		// 	if (j==0) {
-		// 		document.getElementById("bookbutton").click();
-		// 		location.reload();
-		// 		return;
-		// 		j=j+1;
-		// 	}
-		// 	return;
-		// }
 	</script>

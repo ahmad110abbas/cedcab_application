@@ -73,7 +73,7 @@ include 'config.php';
         <th scope="col">Name</th>
         <th scope="col">Date Of Signup</th>
         <th scope="col">Mobile</th>
-        <th scope="col">Action</th>
+        <!-- <th scope="col">Action</th> -->
       </tr>
     </thead>
     <tbody>
@@ -95,7 +95,7 @@ include 'config.php';
                         echo '<td>',$row["name"],'</td>';
                         echo '<td>',$row["dateofsignup"],'</td>';
                         echo '<td>',$row["mobile"],'</td>';
-                        echo '<td><button type="button" class="btn btn-danger">Delete</button><button type="button" class="btn btn-warning">Edit</button></td>';
+                        // echo '<td><button type="button" class="btn btn-danger">Delete</button><button type="button" class="btn btn-warning">Edit</button></td>';
                         echo "<tr>";
                         $count=$count+1;
                       }

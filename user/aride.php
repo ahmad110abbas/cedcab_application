@@ -1,8 +1,41 @@
 <?php 
 session_start();
-print_r($_SESSION['userdata']['user_id']);
+// print_r($_SESSION['userdata']['user_id']);
 include 'config.php';
- ?>
+  if (isset($_GET['d'])) {
+    $ride_id=$_GET['d'];
+    $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+    if ($conn->connect_error) {
+      die("Connection failed: " . $conn->connect_error);
+    }
+    $sql="DELETE FROM `ride` WHERE `ride`.`ride_id` = ".$ride_id."";
+    $result = $conn->query($sql);
+    header('Location: aride.php');
+  }
+  error_reporting(E_WARNING);
+  function display_aride($result){
+    $count=0;
+
+
+    if ($result->num_rows > 0) {
+      while($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo '<th scope="row">',$count,'</th>';
+        echo '<td>',$row["ride_date"],'</td>';
+        echo '<td>',$row["pickup"],'</td>';
+        echo '<td>',$row["destination"],'</td>';
+        echo '<td>',$row["total_distance"],'</td>';
+        echo '<td>',$row["luggage"],'</td>';
+        echo '<td>',$row["total_fare"],'</td>';
+        echo '<td><a type="button" class="btn btn-danger" href="aride.php?d='.$row['ride_id'].'">Delete</a></td>';
+        echo "<tr>";
+        $count=$count+1;
+      }
+    } else {
+      echo "0 results";
+    }
+  }
+  ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -16,6 +49,7 @@ include 'config.php';
   <title>CedCab</title>
 </head>
 <body>
+
   <section class="">
     <nav class="navbar navbar-expand-lg navbar-light py-0"style="background-color: #fabd06;">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +81,19 @@ include 'config.php';
       </div>
     </nav>
   </section>
+  <h3>All Rides</h3>
+  <form action="aride.php" method="POST">
+    <label >Sort:</label>
+    <select name="by">
+      <option value="fare">fare</option>
+      <option value="distance">distance</option>
+    </select>
+    <select  name="order">
+      <option value="ASC">ASC</option>
+      <option value="DESC">DESC</option>
+    </select>
+    <input type="submit" value="sort">
+  </form>
   <table class="table">
     <thead>
       <tr>
@@ -62,32 +109,70 @@ include 'config.php';
     </thead>
     <tbody>
                     <?php 
-                    $count=0;
-                    $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
-                    if ($conn->connect_error) {
-                      die("Connection failed: " . $conn->connect_error);
-                    }
-
-                    $sql = "SELECT * FROM ride WHERE customer_user_id='".$_SESSION['userdata']['user_id']."'";
-                    $result = $conn->query($sql);
-
-                    if ($result->num_rows > 0) {
-                      while($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo '<th scope="row">',$count,'</th>';
-                        echo '<td>',$row["ride_date"],'</td>';
-                        echo '<td>',$row["pickup"],'</td>';
-                        echo '<td>',$row["destination"],'</td>';
-                        echo '<td>',$row["total_distance"],'</td>';
-                        echo '<td>',$row["luggage"],'</td>';
-                        echo '<td>',$row["total_fare"],'</td>';
-                        echo '<td><button type="button" class="btn btn-danger">Delete</button><button type="button" class="btn btn-warning">Edit</button></td>';
-                        echo "<tr>";
-                        $count=$count+1;
-                      }
-                    } else {
-                      echo "0 results";
-                    }
+                          if (isset($_POST) && ($_POST['by']=="fare") && ($_POST['order']=="ASC")) {
+        $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+        if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+        }
+        $sql = "SELECT * FROM ride WHERE customer_user_id='".$_SESSION['userdata']['user_id']."' ORDER BY total_fare ASC";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+          display_aride($result);
+        }  else {
+          echo "0 results";
+        }
+      }
+      if (isset($_POST) && ($_POST['by']=="fare") && ($_POST['order']=="DESC")) {
+        $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+        if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+        }
+        $sql = "SELECT * FROM ride WHERE customer_user_id='".$_SESSION['userdata']['user_id']."' ORDER BY total_fare DESC";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+          display_aride($result);
+        }  else {
+          echo "0 results";
+        }
+      }
+      if (isset($_POST) && ($_POST['by']=="distance") && ($_POST['order']=="ASC")) {
+        $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+        if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+        }
+        $sql = "SELECT * FROM ride WHERE customer_user_id='".$_SESSION['userdata']['user_id']."' ORDER BY total_distance ASC";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+          display_aride($result);
+        }  else {
+          echo "0 results";
+        }
+      }
+      if (isset($_POST) && ($_POST['by']=="distance") && ($_POST['order']=="DESC")) {
+        $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+        if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+        }
+        $sql = "SELECT * FROM ride WHERE customer_user_id='".$_SESSION['userdata']['user_id']."' ORDER BY total_distance DESC";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+          display_aride($result);
+        }  else {
+          echo "0 results";
+        }
+      }else if (!isset($_POST['by'])) {
+        $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+        if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+        }
+        $sql = "SELECT * FROM ride WHERE customer_user_id='".$_SESSION['userdata']['user_id']."'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+          display_aride($result);
+        }  else {
+          echo "0 results";
+        }
+      }
                     ?>
     </tbody>
   </table>

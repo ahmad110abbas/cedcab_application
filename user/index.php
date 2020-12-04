@@ -21,6 +21,7 @@
 			$("#cabtype").change(function(){
 				if ($(this).val()=="CedMicro") {
 					$("#luggage").attr("disabled","enabled");
+          $("#luggage").val("");
 				}
 				else if ($(this).val()!="CedMicro") {$("#luggage").removeAttr("disabled","enabled");}
 		});

@@ -1,6 +1,6 @@
 <?php 
 session_start();
-include 'config.php';
+include 'config.ini.php';
 if (isset($_GET['logout'])) {
     unset($_SESSION['p']);
     unset($_SESSION['d']);
@@ -10,16 +10,46 @@ if (isset($_GET['logout'])) {
     session_destroy();
     header('Location: index.php');
 }
+// if (isset($_POST['login'])) {
+//     $username=isset($_POST['username'])?$_POST['username']:'';
+//     $password=isset($_POST['password'])?$_POST['password']:'';
+//     if ($username=="admin" && $password=="Password123$") {
+//         header('Location: http://localhost/task/cedcab/admin/index.php');
+//     }else{
+//     $sql= "SELECT * FROM user WHERE user_name='".$username."' AND password='".$password."' AND isblock='0'";
+//     $result = $conn->query($sql);
+//     if ($result->num_rows > 0) {
+//         while ($row=$result->fetch_assoc()) {
+//             $_SESSION['userdata']=array('username'=>$row['user_name'],'user_id'=>$row['user_id']);
+//             header('Location:http://localhost/task/cedcab/user/bookcab.php');
+//         }
+//     }else{
+//         echo "Invalid Username or Password or Request Pending";
+//     }
+// }
+// }
+
+
+
 if (isset($_POST['login'])) {
     $username=isset($_POST['username'])?$_POST['username']:'';
     $password=isset($_POST['password'])?$_POST['password']:'';
     if ($username=="admin" && $password=="Password123$") {
+        $_SESSION['admindata']="admin";
         header('Location: http://localhost/task/cedcab/admin/index.php');
     }else{
-    $sql= "SELECT * FROM user WHERE user_name='".$username."' AND password='".$password."' AND isblock='0'";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        while ($row=$result->fetch_assoc()) {
+        $obj=new database();
+        $sql=$obj->login($username, $password);
+        // print_r($sql);
+        // die();
+        // $row=$sql->fetch_assoc();
+        // print_r($row['user_id']);
+        // die();
+    if ($sql->num_rows > 0) {
+        echo "1";
+        while ($row=$sql->fetch_assoc()) {
+            // print_r($row);
+            // die();
             $_SESSION['userdata']=array('username'=>$row['user_name'],'user_id'=>$row['user_id']);
             header('Location:http://localhost/task/cedcab/user/bookcab.php');
         }

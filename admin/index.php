@@ -1,6 +1,12 @@
 <?php 
 session_start();
 if (isset($_SESSION['userdata'])) {
+  unset($_SESSION['userdata']);
+    header('Location: http://localhost/task/cedcab/user/login.php');
+    exit;
+}
+if (!isset($_SESSION['admindata'])) {
+    unset($_SESSION['admindata']);
     header('Location: http://localhost/task/cedcab/user/login.php');
     exit;
 }

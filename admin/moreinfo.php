@@ -132,6 +132,7 @@ function display_user($result){
 				display_user($result);
 			}
 			if (isset($_GET['user']) && ($_GET['user']==0)) {
+				// echo "<h3>User</h3>";
 				$sql = "SELECT * FROM user WHERE isblock='".$_GET['user']."'";
 				$result = $conn->query($sql);
 				display_user($result);

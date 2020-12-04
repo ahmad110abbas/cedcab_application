@@ -86,7 +86,7 @@ if ($result->num_rows > 0) {
     <hr>
 
     <label for="user_name"><b>User_Name</b></label>
-    <input type="text" placeholder="Enter User Name" name="user_name" id="user_name" value=<?php echo '"';print_r($uname);echo '"'; ?> required>
+    <input type="text" placeholder="Enter User Name" name="user_name" id="user_name" value=<?php echo '"';print_r($uname);echo '"'; ?> required readonly>
 
     <label for="name"><b>Name</b></label>
     <input type="text" placeholder="Enter Name" name="name" id="name" value=<?php echo '"';print_r($name1);echo '"'; ?> required>
@@ -99,7 +99,7 @@ if ($result->num_rows > 0) {
 
     <hr>
 
-    <button type="submit" class="registerbtn" name="register">Register</button>
+    <button type="submit" class="registerbtn" name="register">Update</button>
   </div>
   
   <div class="container signin">

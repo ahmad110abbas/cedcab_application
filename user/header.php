@@ -1,4 +1,17 @@
-	<!doctype html>
+<?php 
+// $d=$_POST['d'];
+	include 'config.php';
+	if (isset($_POST['d'])) {
+		$ride_id=$_POST['d'];
+		$conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		$sql="DELETE FROM `ride` WHERE `ride`.`ride_id` = ".$ride_id."";
+		$result = $conn->query($sql);
+	}
+ ?>
+<!doctype html>
 <html lang="en">
 <head>
 

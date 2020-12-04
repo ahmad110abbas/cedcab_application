@@ -2,8 +2,8 @@
 	include 'config.php';
 	$error='';
 	if (isset($_POST['register'])) {
-		$username=isset($_POST['user_name'])?$_POST['user_name']:'';
-		$name=isset($_POST['name'])?$_POST['name']:'';
+		$username=ltrim(isset($_POST['user_name'])?$_POST['user_name']:'');
+		$name=ltrim(isset($_POST['name'])?$_POST['name']:'');
 		$mob_number=isset($_POST['number'])?$_POST['number']:'';
 		$password=isset($_POST['password'])?$_POST['password']:'';
 		$repassword=isset($_POST['repassword'])?$_POST['repassword']:'';
@@ -11,8 +11,8 @@
 		$block=true;
 		$admin=0;
 
-	if ($password!=$repassword) {
-		$error="password doesn't match";
+	if (($password!=$repassword) || ($username=="") || ($name=="")) {
+		$error="password doesn't match or invalid username";
 		echo "<p>",$error,"</p>";
 	}else{
 		$sql = "INSERT INTO user (user_name, name, dateofsignup, mobile, isblock, password, is_admin) VALUES ('".$username."', '".$name."' , '".$date."','".$mob_number."','".$block."','".$password."','".$admin."')";
