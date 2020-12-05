@@ -1,6 +1,9 @@
 <?php 
 session_start();
 include 'config.ini.php';
+if (isset($_SESSION['admindata'])) {
+    unset($_SESSION['admindata']);
+}
 if (isset($_GET['logout'])) {
     unset($_SESSION['p']);
     unset($_SESSION['d']);

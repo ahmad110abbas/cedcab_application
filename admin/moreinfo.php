@@ -40,6 +40,40 @@ function display_rec($result){
 	}
 }
 
+function display_rec_one($result){
+	echo "<thead>";
+	echo "<tr>";
+	echo '<th scope="col">#</th>';
+	echo '<th scope="col">Date</th>';
+	echo '<th scope="col">Pickup</th>';
+	echo '<th scope="col">Destination</th>';
+	echo '<th scope="col">Distance</th>';
+	echo '<th scope="col">Luggage Cost</th>';
+	echo '<th scope="col">Total Fare</th>';
+	echo '<th scope="col">Action</th>';
+	echo '</tr>';
+	echo '</thead>';
+	$count=0;
+	if ($result->num_rows > 0) {
+		while($row = $result->fetch_assoc()) {
+			echo "<tr>";
+			echo '<th scope="row">',$count,'</th>';
+			echo '<td>',$row["ride_date"],'</td>';
+			echo '<td>',$row["pickup"],'</td>';
+			echo '<td>',$row["destination"],'</td>';
+			echo '<td>',$row["total_distance"],'</td>';
+			echo '<td>',$row["luggage"],'</td>';
+			echo '<td>',$row["total_fare"],'</td>';
+			echo '<td><button type="button" class="btn btn-danger" onclick="del('.$row["ride_id"].')">Delete</button></td>';
+			echo "<tr>";
+			$count=$count+1;
+		}
+	} else {
+		echo "0 results";
+	}
+}
+
+
 function display_user($result){
 	echo "<thead>";
 	echo "<tr>";
@@ -69,6 +103,35 @@ function display_user($result){
 	}
 }
 
+
+function display_user_one($result){
+	echo "<thead>";
+	echo "<tr>";
+	echo '<th scope="col">#</th>';
+	echo '<th scope="col">User Name</th>';
+	echo '<th scope="col" onclick="sortTable(2);">Name</th>';
+	echo '<th scope="col">Date Of SignUp</th>';
+	echo '<th scope="col">Mobile</th>';
+	echo '<th scope="col">Action</th>';
+	echo '</tr>';
+	echo '</thead>';
+	$count=0;
+	if ($result->num_rows > 0) {
+		while($row = $result->fetch_assoc()) {
+			echo "<tr>";
+			echo '<th scope="row">',$count,'</th>';
+			echo '<td>',$row["user_name"],'</td>';
+			echo '<td>',$row["name"],'</td>';
+			echo '<td>',$row["dateofsignup"],'</td>';
+			echo '<td>',$row["mobile"],'</td>';
+			echo '<td><button type="button" class="btn btn-danger" onclick="block('.$row["user_id"].')">Block</button><button type="button" class="btn btn-success" onclick="un('.$row["user_id"].')">UnBlock</button></td>';
+			echo "<tr>";
+			$count=$count+1;
+		}
+	} else {
+		echo "0 results";
+	}
+}
 ?>
 
 
@@ -84,6 +147,29 @@ function display_user($result){
 	<title>CedCab</title>
 </head>
 <body>
+	<?php 
+	if ((isset($_GET['id'])) && $_GET['id']==1) {
+		echo "<h3>Pending Rides</h3>";
+	}
+	if ((isset($_GET['id'])) && $_GET['id']==2) {
+		echo "<h3>Completed Rides</h3>";
+	}
+	if ((isset($_GET['id'])) && $_GET['id']==3) {
+		echo "<h3>All Rides</h3>";
+	}
+	if ((isset($_GET['id'])) && $_GET['id']==0) {
+		echo "<h3>Canceled Rides</h3>";
+	}
+	if ((isset($_GET['user'])) && $_GET['user']==1) {
+		echo "<h3>Pending User Request</h3>";
+	}
+	if ((isset($_GET['user'])) && $_GET['user']==2) {
+		echo "<h3>All Users</h3>";
+	}
+	if ((isset($_GET['user'])) && $_GET['user']==0) {
+		echo "<h3>Approved User Request</h3>";
+	}
+	 ?>
 	<a href="index.php">Back To Home</a>
 	<form action="" method="POST">
 		<?php echo '<input type="text" name="data" value="" hidden>';  ?>
@@ -109,17 +195,17 @@ function display_user($result){
 			if (isset($_GET['id']) && ($_GET['id']==3) && is_null($_POST['fare']) && is_null($_POST['lastweek'])) {
 				$sql = "SELECT * FROM ride";
 				$result = $conn->query($sql);
-				display_rec($result);
+				display_rec_one($result);
 			}
 			if (isset($_GET['id']) && ($_GET['id']==2) && is_null($_POST['fare'])) {
 				$sql = "SELECT * FROM ride WHERE status='".$_GET['id']."'";
 				$result = $conn->query($sql);
-				display_rec($result);
+				display_rec_one($result);
 			}
 			if (isset($_GET['id']) && ($_GET['id']==0)) {
 				$sql = "SELECT * FROM ride WHERE status='".$_GET['id']."'";
 				$result = $conn->query($sql);
-				display_rec($result);
+				display_rec_one($result);
 			}
 			if (isset($_GET['user']) && ($_GET['user']==1)) {
 				$sql = "SELECT * FROM user WHERE isblock='".$_GET['user']."'";
@@ -129,13 +215,13 @@ function display_user($result){
 			if (isset($_GET['user']) && ($_GET['user']==2)) {
 				$sql = "SELECT * FROM user";
 				$result = $conn->query($sql);
-				display_user($result);
+				display_user_one($result);
 			}
 			if (isset($_GET['user']) && ($_GET['user']==0)) {
 				// echo "<h3>User</h3>";
 				$sql = "SELECT * FROM user WHERE isblock='".$_GET['user']."'";
 				$result = $conn->query($sql);
-				display_user($result);
+				display_user_one($result);
 			}
 
 
@@ -165,17 +251,17 @@ function display_user($result){
 			if (isset($_POST['fare']) && ($_GET['id']==3)) {
 				$sql = "SELECT * FROM ride ORDER BY total_fare DESC";
 				$result = $conn->query($sql);
-				display_rec($result);
+				display_rec_one($result);
 			}
 			if (isset($_POST['lastweek']) && ($_GET['id']==3)) {
 				$sql="SELECT * FROM `ride` WHERE ride_date >= DATE_ADD(CURDATE(),INTERVAL -7 DAY)";
 				$result = $conn->query($sql);
-				display_rec($result);
+				display_rec_one($result);
 			}
 			if (isset($_POST['date']) && ($_GET['id']==3)) {
 				$sql="SELECT * FROM `ride` ORDER BY `ride`.`ride_date` DESC";
 				$result = $conn->query($sql);
-				display_rec($result);
+				display_rec_one($result);
 			}
 
 
@@ -185,17 +271,17 @@ function display_user($result){
 			if (isset($_POST['fare']) && ($_GET['id']==2)) {
 				$sql = "SELECT * FROM ride ORDER BY total_fare DESC";
 				$result = $conn->query($sql);
-				display_rec($result);
+				display_rec_one($result);
 			}
 			if (isset($_POST['lastweek']) && ($_GET['id']==2)) {
 				$sql="SELECT * FROM `ride` WHERE ride_date >= DATE_ADD(CURDATE(),INTERVAL -7 DAY)";
 				$result = $conn->query($sql);
-				display_rec($result);
+				display_rec_one($result);
 			}
 			if (isset($_POST['date']) && ($_GET['id']==2)) {
 				$sql="SELECT * FROM `ride` ORDER BY `ride`.`ride_date` DESC";
 				$result = $conn->query($sql);
-				display_rec($result);
+				display_rec_one($result);
 			}
 
 			?>
@@ -243,6 +329,51 @@ function display_user($result){
 			url:'update.php',
 			type:'POST',
 			data:{va:va},
+			success:function(result){
+				console.log(result);
+			},
+			error: function(){
+				alert("error");
+			}
+		});
+	}
+	function del(d){
+		// console.log(va);
+		location.reload();
+		$.ajax({
+			url:'update.php',
+			type:'POST',
+			data:{d:d},
+			success:function(result){
+				console.log(result);
+			},
+			error: function(){
+				alert("error");
+			}
+		});
+	}
+	function del(b){
+		// console.log(va);
+		location.reload();
+		$.ajax({
+			url:'update.php',
+			type:'POST',
+			data:{b:b},
+			success:function(result){
+				console.log(result);
+			},
+			error: function(){
+				alert("error");
+			}
+		});
+	}
+	function un(u){
+		// console.log(va);
+		location.reload();
+		$.ajax({
+			url:'update.php',
+			type:'POST',
+			data:{u:u},
 			success:function(result){
 				console.log(result);
 			},
